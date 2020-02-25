@@ -1,0 +1,24 @@
+version: "2.2"
+services:
+  fib-api:
+    build: .
+    command:
+    - /usr/local/bin/gunicorn -b $$LISTEN_HOST:$$LISTEN_PORT --reload -w 1 fib:api
+      -c /fib/fib/gunicorn.py --access-logfile=- --error-logfile=- --log-file=-
+    container_name: fib-api
+    cpus: 0
+    entrypoint:
+    - /bin/sh
+    - -c
+    environment:
+    - LISTEN_PORT=5050
+    - LISTEN_HOST=0.0.0.0
+    - MAXIMUM_FIB_LENGTH=10
+    image: dev/fib:latest
+    ports:
+    - 8080:5050
+    volumes:
+    - .:/fib
+    working_dir: /fib
+
+
